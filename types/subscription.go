@@ -2,8 +2,6 @@ package types
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // Subscription represents the core subscription entity
