@@ -126,6 +126,16 @@ type StripeWebhookEvent struct {
 	Object string      `json:"object"`
 }
 
+// GetUserSubscriptionRequest represents the request to get a user's subscription
+type GetUserSubscriptionRequest struct {
+	UserID string `json:"user_id" validate:"required"`
+}
+
+// HasActiveSubscription returns true if the subscription is active
+func (s *SubscriptionResponse) HasActiveSubscription() bool {
+	return s.Status == SubscriptionStatusActive || s.Status == SubscriptionStatusTrialing
+}
+
 // ErrorResponse represents an error response
 type ErrorResponse struct {
 	Error   string `json:"error"`

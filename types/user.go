@@ -14,12 +14,7 @@ type User struct {
 	GoogleID              *string    `json:"-"`
 	Role                  string     `json:"role"`
 	OrgID                 *uuid.UUID `json:"org_id,omitempty"`
-	EmailVerified         bool       `json:"email_verified"`
-	HasActiveSubscription bool       `json:"has_active_subscription"`
-	StripeCustomerID      *string    `json:"-"`
-	StripeSubscriptionID  *string    `json:"-"`
-	SubscriptionTier      *string    `json:"subscription_tier,omitempty"`
-	SubscriptionStatus    *string    `json:"subscription_status,omitempty"`
+	EmailVerified bool `json:"email_verified"`
 	VerificationToken     *string    `json:"-"`
 	TokenExpiresAt        *time.Time `json:"-"`
 	CreatedAt             time.Time  `json:"created_at"`
@@ -31,6 +26,8 @@ type User struct {
 type UserCreateRequest struct {
 	Email             string     `json:"email" validate:"required,email"`
 	PasswordHash      string     `json:"password_hash,omitempty"`
+	GoogleID          string     `json:"google_id,omitempty"`
+	EmailVerified     bool       `json:"email_verified,omitempty"`
 	Role              string     `json:"role,omitempty"`
 	OrgID             *uuid.UUID `json:"org_id,omitempty"`
 	VerificationToken string     `json:"verification_token,omitempty"`
@@ -46,15 +43,13 @@ type UserUpdateRequest struct {
 
 // UserResponse represents the public user data returned to clients
 type UserResponse struct {
-	ID                    string     `json:"id"`
-	Email                 string     `json:"email"`
-	Role                  string     `json:"role"`
-	OrgID                 *uuid.UUID `json:"org_id,omitempty"`
-	EmailVerified         bool       `json:"email_verified"`
-	HasActiveSubscription bool       `json:"has_active_subscription"`
-	SubscriptionTier      *string    `json:"subscription_tier,omitempty"`
-	SubscriptionStatus    *string    `json:"subscription_status,omitempty"`
-	CreatedAt             time.Time  `json:"created_at"`
+	ID                    string        `json:"id"`
+	Email                 string        `json:"email"`
+	Role                  string        `json:"role"`
+	OrgID         *uuid.UUID    `json:"org_id,omitempty"`
+	EmailVerified bool          `json:"email_verified"`
+	CreatedAt             time.Time     `json:"created_at"`
+	Subscription          *Subscription `json:"subscription,omitempty"`
 }
 
 // ToResponse converts a User to UserResponse, excluding sensitive fields
@@ -64,11 +59,9 @@ func (u *User) ToResponse() UserResponse {
 		Email:                 u.Email,
 		Role:                  u.Role,
 		OrgID:                 u.OrgID,
-		EmailVerified:         u.EmailVerified,
-		HasActiveSubscription: u.HasActiveSubscription,
-		SubscriptionTier:      u.SubscriptionTier,
-		SubscriptionStatus:    u.SubscriptionStatus,
+		EmailVerified: u.EmailVerified,
 		CreatedAt:             u.CreatedAt,
+		Subscription:          nil, // Will be populated separately by auth service
 	}
 }
 
