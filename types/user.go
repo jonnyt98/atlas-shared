@@ -45,9 +45,14 @@ type UserUpdateRequest struct {
 type UserResponse struct {
 	ID                    string        `json:"id"`
 	Email                 string        `json:"email"`
+	Name                  string        `json:"name,omitempty"`
 	Role                  string        `json:"role"`
-	OrgID         *uuid.UUID    `json:"org_id,omitempty"`
-	EmailVerified bool          `json:"email_verified"`
+	OrgID                 *uuid.UUID    `json:"org_id,omitempty"`
+	EmailVerified         bool          `json:"email_verified"`
+	OnboardingComplete    bool          `json:"onboarding_completed"`
+	StripeCustomerID      string        `json:"stripe_customer_id,omitempty"`
+	SubscriptionStatus    string        `json:"subscription_status,omitempty"`
+	SubscriptionTier      string        `json:"subscription_tier,omitempty"`
 	CreatedAt             time.Time     `json:"created_at"`
 	Subscription          *Subscription `json:"subscription,omitempty"`
 }
